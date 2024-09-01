@@ -31,7 +31,7 @@ const App = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>(allowedCountries[0].code);
 
   const allowedShapes = _.values(SliceShape);
-  const [sliceShape, setSliceShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
+  const [sliceShape, setSliceShape] = useState<SliceShape>(SliceShape.Circle); // Default shape
 
   const allowedDistanceUnits = _.values(DistanceUnit);
   const [radius, setRadius] = useState<number>(50);
