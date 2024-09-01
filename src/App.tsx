@@ -25,7 +25,7 @@ const App = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>(allowedCountries[0].code);
 
   const allowedShapes = _.values(SliceShape);
-  const [selectedShape, setSelectedShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
+  const [sliceShape, setSliceShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
 
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -61,7 +61,7 @@ const App = () => {
   };
 
   const handleShapeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedShape(e.target.value as SliceShape);
+    setSliceShape(e.target.value as SliceShape);
   };
 
   return (
@@ -90,7 +90,7 @@ const App = () => {
             </div>
             <div className="setting-row">
               <label htmlFor="shapeSelect">Shape:</label>
-              <select id="shapeSelect" value={selectedShape} onChange={handleShapeChange} className="fx-1 setting">
+              <select id="shapeSelect" value={sliceShape} onChange={handleShapeChange} className="fx-1 setting">
                 <>
                   {allowedShapes.map(shape => (
                     <option key={shape} value={shape}>{_.capitalize(shape)}</option>
