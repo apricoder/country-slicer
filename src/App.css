@@ -27,6 +27,17 @@
 }
 
 .side-panel {
-  max-width: 300px;
-  background-color: #fefefe;
+  background-color: #eee;
+  overflow: hidden;
+  position: relative;
+}
+
+.resize-handle {
+  width: 5px;
+  border-right: 1px solid #777;
+  cursor: ew-resize;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
 }
