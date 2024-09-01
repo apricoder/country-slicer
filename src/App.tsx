@@ -14,16 +14,16 @@ enum SliceShape {
 }
 
 const App = () => {
-  const [panelWidth, setPanelWidth] = useState<number>(300); // Default width
+  const [settingsPanelWidth, setSettingsPanelWidth] = useState<number>(300); // Default width
+  const settingsPanelRef = useRef<HTMLDivElement | null>(null);
 
   const allowedShapes = _.values(SliceShape);
   const [selectedShape, setSelectedShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
 
-  const settingsPanelRef = useRef<HTMLDivElement | null>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const startX = e.clientX;
-    const startWidth = panelWidth;
+    const startWidth = settingsPanelWidth;
 
     // Prevent text selection and set the cursor
     document.body.style.userSelect = 'none';
@@ -34,7 +34,7 @@ const App = () => {
         Math.max(startWidth + moveEvent.clientX - startX, 200), // Min width
         400 // Max width
       );
-      setPanelWidth(newWidth);
+      setSettingsPanelWidth(newWidth);
     };
 
     const handleMouseUp = () => {
@@ -58,7 +58,7 @@ const App = () => {
       <div className="fx-row h-100vh">
         <div
           className="settings-panel fx-col h-100"
-          style={{ width: `${panelWidth}px` }}
+          style={{ width: `${settingsPanelWidth}px` }}
           ref={settingsPanelRef}
         >
           <div className="resize-handle" onMouseDown={handleMouseDown}></div>
