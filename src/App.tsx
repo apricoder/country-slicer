@@ -7,22 +7,7 @@ import { MapContainer, TileLayer, Polygon } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as L from 'leaflet'
 
-// Poland border coordinates (simplified for the example)
-const polandBorders = [
-  [54.800685, 19.772611],
-  [54.035318, 23.374809],
-  [52.089947, 23.176333],
-  [50.884372, 24.029986],
-  [49.028753, 22.558138],
-  [49.470107, 19.922346],
-  [50.047929, 18.815423],
-  [50.705407, 16.226228],
-  [51.106674, 14.607098],
-  [52.839478, 14.353315],
-  [54.050706, 16.363477],
-  [54.682606, 18.696254],
-  [54.800685, 19.772611],
-];
+import polandBorderPolygons from './polygons/pol';
 
 
 const App = () => {
