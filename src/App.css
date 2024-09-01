@@ -9,6 +9,10 @@
   flex-direction: row;
 }
 
+.fx-space-between {
+  justify-content: space-between;
+}
+
 .fx-col {
   display: flex;
   flex-direction: column;
@@ -42,11 +46,24 @@
 }
 
 .settings-section {
-  padding: 16px 24px 0;
+  padding: 24px 24px 0;
+}
+
+.settings-section .setting-row {
+  padding-top: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.settings-section .setting-row:first-child {
+  padding-top: 0;
 }
 
 .settings-section .setting {
   margin-left: 10px;
+  max-width: 60%;
+  padding: 0 5px;
 }
 
 .resize-handle {

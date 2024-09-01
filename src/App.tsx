@@ -13,6 +13,11 @@ enum SliceShape {
   Circle = 'circle',
 }
 
+const allowedCountries = [{
+  code: 'pol',
+  name: 'Poland',
+}];
+
 const App = () => {
   const [settingsPanelWidth, setSettingsPanelWidth] = useState<number>(300); // Default width
   const settingsPanelRef = useRef<HTMLDivElement | null>(null);
@@ -20,6 +25,7 @@ const App = () => {
   const allowedShapes = _.values(SliceShape);
   const [selectedShape, setSelectedShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
 
+  const [selectedCountry, setSelectedCountry] = useState<string>(allowedCountries[0].code);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const startX = e.clientX;
@@ -49,6 +55,10 @@ const App = () => {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCountry(e.target.value);
+  };
+
   const handleShapeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedShape(e.target.value as SliceShape);
   };
@@ -67,8 +77,18 @@ const App = () => {
           </div>
 
           <div className="settings-section">
-            <div className="fx-row">
-              <label htmlFor="shapeSelect" className="fx-05">Shape:</label>
+            <div className="setting-row">
+              <label htmlFor="shapeSelect">Country:</label>
+              <select id="shapeSelect" value={selectedCountry} onChange={handleCountryChange} className="fx-1 setting">
+                <>
+                  {allowedCountries.map(country => (
+                    <option key={country.code} value={country.code}>{country.name}</option>
+                  ))}
+                </>
+              </select>
+            </div>
+            <div className="setting-row">
+              <label htmlFor="shapeSelect">Shape:</label>
               <select id="shapeSelect" value={selectedShape} onChange={handleShapeChange} className="fx-1 setting">
                 <>
                   {allowedShapes.map(shape => (
