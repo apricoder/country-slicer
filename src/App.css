@@ -19,6 +19,7 @@
 }
 
 .fx-1 {
+  width: 0;
   flex-grow: 1;
 }
 
@@ -63,7 +64,13 @@
 .settings-section .setting {
   margin-left: 10px;
   max-width: 60%;
+  flex-grow: 1;
+}
+
+.settings-section .setting select,
+.settings-section .setting input {
   padding: 0 5px;
+  box-sizing: border-box;
 }
 
 .resize-handle {

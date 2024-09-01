@@ -13,6 +13,11 @@ enum SliceShape {
   Circle = 'circle',
 }
 
+enum DistanceUnit {
+  Km = 'km',
+  Mi = 'mi',
+}
+
 const allowedCountries = [{
   code: 'pol',
   name: 'Poland',
@@ -26,6 +31,10 @@ const App = () => {
 
   const allowedShapes = _.values(SliceShape);
   const [sliceShape, setSliceShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
+
+  const allowedDistanceUnits = _.values(DistanceUnit);
+  const [radius, setRadius] = useState<number>(50);
+  const [radiusUnit, setRadiusUnit] = useState<DistanceUnit>(DistanceUnit.Km);
 
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -64,6 +73,14 @@ const App = () => {
     setSliceShape(e.target.value as SliceShape);
   };
 
+  const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRadius(e.target.value as number);
+  };
+
+  const handleRadiusUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRadiusUnit(e.target.value as DistanceUnit);
+  };
+
   return (
     <>
       <div className="fx-row h-100vh">
@@ -96,6 +113,26 @@ const App = () => {
                 ))}
               </select>
             </div>
+            {
+              sliceShape === SliceShape.Circle && (
+                <div className="setting-row">
+                  <label htmlFor="radiusInput">Radius:</label>
+                  <div className="fx-row setting">
+                    <input id="radiusInput" className="fx-1"
+                           value={radius} onChange={handleRadiusChange}
+                           min={1} max={999}
+                           type="number"
+                    />
+                    <select id="radiusUnitSelect" value={radiusUnit} onChange={handleRadiusUnitChange}>
+                      {allowedDistanceUnits.map(unit => (
+                        <option key={unit} value={unit}>{unit}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )
+            }
+
           </div>
 
         </div>
