@@ -3,3 +3,30 @@
   height: 100vh;
   box-sizing: border-box;
 }
+
+.fx-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.fx-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.fx-1 {
+  flex-grow: 1;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.h-100vh {
+  height: 100vh;
+}
+
+.side-panel {
+  max-width: 300px;
+  background-color: #fefefe;
+}
