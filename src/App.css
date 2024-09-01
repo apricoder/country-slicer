@@ -18,6 +18,10 @@
   flex-grow: 1;
 }
 
+.fx-05 {
+  flex-grow: 0.5;
+}
+
 .h-100 {
   height: 100%;
 }
@@ -26,10 +30,23 @@
   height: 100vh;
 }
 
-.side-panel {
+.settings-panel {
   background-color: #eee;
   overflow: hidden;
   position: relative;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 200;
+}
+
+.settings-section {
+  padding: 16px 24px 0;
+}
+
+.settings-section .setting {
+  margin-left: 10px;
 }
 
 .resize-handle {

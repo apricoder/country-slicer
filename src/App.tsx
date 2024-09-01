@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useRef, useState } from "react";
+import * as _ from "lodash";
 import { MapContainer, Polygon, TileLayer } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
@@ -7,10 +8,18 @@ import './App.css'
 
 import polandBorderPolygons from './polygons/pol';
 
+enum SliceShape {
+  Rectangle = 'rectangle',
+  Circle = 'circle',
+}
 
 const App = () => {
   const [panelWidth, setPanelWidth] = useState<number>(300); // Default width
-  const sidePanelRef = useRef<HTMLDivElement | null>(null);
+
+  const allowedShapes = _.values(SliceShape);
+  const [selectedShape, setSelectedShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
+
+  const settingsPanelRef = useRef<HTMLDivElement | null>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const startX = e.clientX;
@@ -40,16 +49,35 @@ const App = () => {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
+  const handleShapeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedShape(e.target.value as SliceShape);
+  };
+
   return (
     <>
       <div className="fx-row h-100vh">
         <div
-          className="side-panel fx-col h-100"
+          className="settings-panel fx-col h-100"
           style={{ width: `${panelWidth}px` }}
-          ref={sidePanelRef}
+          ref={settingsPanelRef}
         >
-          <div className="title-wrapper">Country Slicer</div>
           <div className="resize-handle" onMouseDown={handleMouseDown}></div>
+          <div className="settings-section">
+            <div className="title">Country Slicer</div>
+          </div>
+
+          <div className="settings-section">
+            <div className="fx-row">
+              <label htmlFor="shapeSelect" className="fx-05">Shape:</label>
+              <select id="shapeSelect" value={selectedShape} onChange={handleShapeChange} className="fx-1 setting">
+                <>
+                  {allowedShapes.map(shape => (
+                    <option key={shape} value={shape}>{_.capitalize(shape)}</option>
+                  ))}
+                </>
+              </select>
+            </div>
+          </div>
 
         </div>
 
