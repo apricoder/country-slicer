@@ -48,3 +48,6 @@ export default tseslint.config({
   },
 })
 ```
+---
+
+`countries.geojson` comes from here: https://github.com/datasets/geo-countries/blob/master/data/countries.geojson
