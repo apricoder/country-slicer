@@ -35,10 +35,22 @@
   height: 100vh;
 }
 
+.buttons-row > * {
+  margin-left: 10px;
+}
+
+.buttons-row > :first-child {
+  margin-left: 0;
+}
+
 .settings-panel {
   background-color: #eee;
   overflow: hidden;
   position: relative;
+}
+
+.settings-panel button {
+  height: 24px;
 }
 
 .title {

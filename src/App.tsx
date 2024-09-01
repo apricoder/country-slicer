@@ -135,6 +135,13 @@ const App = () => {
 
           </div>
 
+          <div className="settings-section">
+            <div className="fx-row buttons-row">
+              <button className="fx-1">Clear</button>
+              <button className="fx-1">Slice</button>
+            </div>
+          </div>
+
         </div>
 
         <div className="fx-1 h-100">
