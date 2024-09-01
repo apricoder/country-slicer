@@ -47,8 +47,8 @@ const App = () => {
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const newWidth = Math.min(
-        Math.max(startWidth + moveEvent.clientX - startX, 200), // Min width
-        400 // Max width
+        Math.max(startWidth + moveEvent.clientX - startX, 300), // Min width
+        600 // Max width
       );
       setSettingsPanelWidth(newWidth);
     };
