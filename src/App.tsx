@@ -22,10 +22,11 @@ const App = () => {
   const [settingsPanelWidth, setSettingsPanelWidth] = useState<number>(300); // Default width
   const settingsPanelRef = useRef<HTMLDivElement | null>(null);
 
+  const [selectedCountry, setSelectedCountry] = useState<string>(allowedCountries[0].code);
+
   const allowedShapes = _.values(SliceShape);
   const [selectedShape, setSelectedShape] = useState<SliceShape>(SliceShape.Rectangle); // Default shape
 
-  const [selectedCountry, setSelectedCountry] = useState<string>(allowedCountries[0].code);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const startX = e.clientX;
