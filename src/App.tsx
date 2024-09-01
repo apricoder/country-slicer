@@ -37,7 +37,7 @@ const App = () => {
   const [radius, setRadius] = useState<number>(50);
   const [radiusUnit, setRadiusUnit] = useState<DistanceUnit>(DistanceUnit.Km);
 
-  const [slicedCircles, setSlicedCircles] = useState([]);
+  const [slicedCircles, setSlicedCircles] = useState<any[]>([]);  // todo fix properly
 
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -77,7 +77,7 @@ const App = () => {
   };
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRadius(e.target.value as number);
+    setRadius(+e.target.value); // todo fix properly
   };
 
   const handleRadiusUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -122,7 +122,7 @@ const App = () => {
 
     // Create circles from points
     const circles = grid.map(point => {
-      const circle = turf.circle(point, radiusInKm, { units: 'kilometers' });
+      const circle = turf.circle(point, radiusInKm, { units: 'kilometers' } as any);  // todo fix properly
       return {
         ...circle,
         properties: {
@@ -224,10 +224,10 @@ const App = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
             <>
-              {polandBorderPolygons.map((p, i) => (
+              {polandBorderPolygons.map((p: any, i) => (  // todo fix properly
                 <Polygon key={i} positions={p} color="blue"/>
               ))}
-              {slicedCircles.map((circle, index) => (
+              {slicedCircles.map((circle: any, index) => (  // todo fix properly
                 <Circle
                   key={index}
                   center={circle.center}
