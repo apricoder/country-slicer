@@ -78,8 +78,8 @@ const App = () => {
 
           <div className="settings-section">
             <div className="setting-row">
-              <label htmlFor="shapeSelect">Country:</label>
-              <select id="shapeSelect" value={selectedCountry} onChange={handleCountryChange} className="fx-1 setting">
+              <label htmlFor="countrySelect">Country:</label>
+              <select id="countrySelect" value={selectedCountry} onChange={handleCountryChange} className="fx-1 setting">
                 <>
                   {allowedCountries.map(country => (
                     <option key={country.code} value={country.code}>{country.name}</option>
