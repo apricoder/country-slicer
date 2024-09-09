@@ -2,7 +2,7 @@ import * as React from "react";
 import { useRef, useState } from "react";
 import * as _ from "lodash";
 import * as turf from '@turf/turf';
-import { Circle, MapContainer, Polygon, TileLayer } from 'react-leaflet';
+import { Circle, MapContainer, Polygon, Rectangle, TileLayer } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import './App.css'
@@ -39,6 +39,10 @@ const App = () => {
 
   const [slicedCircles, setSlicedCircles] = useState<any[]>([]);  // todo fix properly
 
+  const [sideLength, setSideLength] = useState<number>(100);
+  const [sideLengthUnit, setSideLengthUnit] = useState<DistanceUnit>(DistanceUnit.Km);
+
+  const [slicedSquares, setSlicedSquares] = useState<any[]>([]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const startX = e.clientX;
@@ -85,62 +89,60 @@ const App = () => {
   };
 
   const slice = () => {
-    const polygon = polandBorderPolygons[0];  // todo support countries in multiple parts
+    const polygon = polandBorderPolygons[0];
     const polygonFeature = turf.polygon([polygon]);
 
     const bounds = turf.bbox(polygonFeature);
     const [west, south, east, north] = bounds;
 
-    console.log(`>> bounds`, bounds);
+    console.log(`>> bounds`, { north, south, west, east });
 
-    // Convert radius to kilometers
-    const radiusInKm = radiusUnit === DistanceUnit.Km ? radius : radius * 1.60934;
+    // Convert side length to kilometers
+    const sideLengthInKm = sideLengthUnit === DistanceUnit.Km ? sideLength : sideLength * 1.60934;
 
-    // Calculate the cell size in degrees
-    const centerLat = (north + south) / 2;
-    const cellSizeX = (radiusInKm * 2) / (111.32 * Math.cos(centerLat * Math.PI / 180));
-    const cellSizeY = (radiusInKm * 2) / 110.574;
+    // Function to calculate the longitude difference for a given latitude and distance
+    const getLongitudeDelta = (lat: number, distanceKm: number) => {
+      const earthRadius = 6371; // Earth's radius in kilometers
+      const latRad = lat * (Math.PI / 180);
+      const longitudeDelta = (distanceKm / earthRadius) * (180 / Math.PI) / Math.cos(latRad);
+      return longitudeDelta;
+    };
 
-    // Adjust vertical spacing to create overlap
-    const verticalSpacingFactor = Math.sqrt(3) / 2; // This creates the proper overlap for a hexagonal packing
-    const adjustedCellSizeY = cellSizeY * verticalSpacingFactor;
+    // Calculate the number of rows (latitude steps)
+    const latitudeStep = sideLengthInKm / 111.32;
+    const rows = Math.ceil((north - south) / latitudeStep);
 
-    // Create a grid of points
-    const xCount = Math.ceil((east - west) / cellSizeX);
-    const yCount = Math.ceil((north - south) / adjustedCellSizeY);
+    const squares = [];
 
-    const grid = [];
-    for (let y = 0; y <= yCount; y++) {
-      const isOddRow = y % 2 !== 0;
-      const xOffset = isOddRow ? cellSizeX / 2 : 0;
-      for (let x = 0; x <= xCount; x++) {
-        const lon = west + x * cellSizeX + xOffset;
-        const lat = south + y * adjustedCellSizeY;
-        grid.push(turf.point([lon, lat]));
+    for (let row = 0; row < rows; row++) {
+      const lat = south + row * latitudeStep;
+      const longitudeDelta = getLongitudeDelta(lat, sideLengthInKm);
+      const cols = Math.ceil((east - west) / longitudeDelta);
+
+      for (let col = 0; col < cols; col++) {
+        const lon = west + col * longitudeDelta;
+        const squareBbox = [
+          lon,
+          lat,
+          lon + longitudeDelta,
+          lat + latitudeStep
+        ];
+        const squarePolygon = turf.bboxPolygon(squareBbox);
+
+        if (turf.booleanIntersects(squarePolygon, polygonFeature)) {
+          squares.push({
+            bbox: squareBbox,
+            properties: { intersects: true }
+          });
+        }
       }
     }
 
-    // Create circles from points
-    const circles = grid.map(point => {
-      const circle = turf.circle(point, radiusInKm, { units: 'kilometers' } as any);  // todo fix properly
-      return {
-        ...circle,
-        properties: {
-          ...circle.properties,
-          intersects: turf.booleanIntersects(circle, polygonFeature)
-        }
-      };
-    });
-
-    // Filter out circles that don't intersect with Poland
-    const intersectingCircles = circles.filter(circle => circle.properties.intersects);
-
     // Convert to Leaflet format
-    const leafletCircles = intersectingCircles.map(circle => {
-      const [lng, lat] = turf.center(circle).geometry.coordinates;
+    const leafletSquares = squares.map(square => {
+      const [west, south, east, north] = square.bbox;
       return {
-        center: [lng, lat], // Leaflet uses [lat, lng] order
-        radius: radiusInKm * 1000, // Convert km to meters for Leaflet
+        bounds: [[west, south], [east, north]],
         options: {
           color: 'green',
           fillColor: 'green',
@@ -149,9 +151,9 @@ const App = () => {
       };
     });
 
-    console.log(`>> leafletCircles`, leafletCircles);
+    console.log(`>> leafletSquares`, leafletSquares);
 
-    setSlicedCircles(leafletCircles);
+    setSlicedSquares(leafletSquares);
   }
 
   return (
@@ -227,12 +229,19 @@ const App = () => {
               {polandBorderPolygons.map((p: any, i) => (  // todo fix properly
                 <Polygon key={i} positions={p} color="blue"/>
               ))}
-              {slicedCircles.map((circle: any, index) => (  // todo fix properly
-                <Circle
+              {/*{slicedCircles.map((circle: any, index) => (  // todo fix properly*/}
+              {/*  <Circle*/}
+              {/*    key={index}*/}
+              {/*    center={circle.center}*/}
+              {/*    radius={circle.radius}*/}
+              {/*    pathOptions={circle.options}*/}
+              {/*  />*/}
+              {/*))}*/}
+              {slicedSquares.map((square: any, index) => (
+                <Rectangle
                   key={index}
-                  center={circle.center}
-                  radius={circle.radius}
-                  pathOptions={circle.options}
+                  bounds={square.bounds}
+                  pathOptions={square.options}
                 />
               ))}
             </>
